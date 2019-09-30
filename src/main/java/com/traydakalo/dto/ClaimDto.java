@@ -5,11 +5,26 @@ public class ClaimDto {
     private String name;
     private String claim;
     private boolean completed;
-    private long userAccountId;
-    private long managerAccountId;
-    private long masterAccountId;
+    private long userId;
+    private long managerId;
+    private long masterId;
+    private long price;
+    private String rejection;
 
     public ClaimDto() {
+    }
+
+    public ClaimDto(long id, String name, String claim, boolean completed, long price,
+                    long userId, long managerId, long masterId, String rejection) {
+        this.id = id;
+        this.name = name;
+        this.claim = claim;
+        this.completed = completed;
+        this.userId = userId;
+        this.managerId = managerId;
+        this.masterId = masterId;
+        this.price = price;
+        this.rejection = rejection;
     }
 
     public String getClaim() {
@@ -52,75 +67,44 @@ public class ClaimDto {
         this.completed = completed;
     }
 
-    public long getUserAccountId() {
-        return userAccountId;
+    public long getUserId() {
+        return userId;
     }
 
-    public void setUserAccountId(long userAccountId) {
-        this.userAccountId = userAccountId;
+    public void setUserId(long userId) {
+        this.userId = userId;
     }
 
-    public long getManagerAccountId() {
-        return managerAccountId;
+    public long getManagerId() {
+        return managerId;
     }
 
-    public void setManagerAccountId(long managerAccountId) {
-        this.managerAccountId = managerAccountId;
+    public void setManagerId(long managerId) {
+        this.managerId = managerId;
     }
 
-    public long getMasterAccountId() {
-        return masterAccountId;
+    public long getMasterId() {
+        return masterId;
     }
 
-    public void setMasterAccountId(long masterAccountId) {
-        this.masterAccountId = masterAccountId;
+    public void setMasterId(long masterId) {
+        this.masterId = masterId;
     }
 
-    public static class Builder {
-        private ClaimDto claimDto;
+    public String getRejection() {
+        return rejection;
+    }
 
-        public Builder() {
-            claimDto = new ClaimDto();
-        }
+    public void setRejection(String rejection) {
+        this.rejection = rejection;
+    }
 
-        public Builder id(long id) {
-            claimDto.id = id;
-            return this;
-        }
+    public long getPrice() {
+        return price;
+    }
 
-        public Builder name(String name) {
-            claimDto.name = name;
-            return this;
-        }
-
-        public Builder claim(String claim) {
-            claimDto.claim = claim;
-            return this;
-        }
-
-        public Builder completed(boolean completed) {
-            claimDto.completed = completed;
-            return this;
-        }
-
-        public Builder userAccountId(long id) {
-            claimDto.userAccountId = id;
-            return this;
-        }
-
-        public Builder managerAccountId(long id) {
-            claimDto.managerAccountId = id;
-            return this;
-        }
-
-        public Builder masterAccountId(long id) {
-            claimDto.masterAccountId = id;
-            return this;
-        }
-
-        public ClaimDto build() {
-            return claimDto;
-        }
+    public void setPrice(long price) {
+        this.price = price;
     }
 }
 

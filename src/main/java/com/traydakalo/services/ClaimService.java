@@ -3,6 +3,8 @@ package com.traydakalo.services;
 import com.traydakalo.dao.queries.ClaimDao;
 import com.traydakalo.dao.queries.ClaimDaoInterface;
 import com.traydakalo.dto.ClaimDto;
+import com.traydakalo.dto.ClaimDtoBuilder;
+import com.traydakalo.dto.UserDto;
 import com.traydakalo.entity.Claim;
 
 import java.util.List;
@@ -28,15 +30,17 @@ public class ClaimService {
     }
 
     private ClaimDto mapToClaimDto(Claim claim) {
-        return new ClaimDto.Builder()
-                .id(claim.getId())
-                .name(claim.getName())
-                .claim(claim.getClaim())
-                .completed(claim.isCompleted())
-                .userAccountId(claim.getUserAccountId())
-                .managerAccountId(claim.getManagerAccountId())
-                .masterAccountId(claim.getMasterAccountId())
-                .build();
+        return new ClaimDtoBuilder()
+                .setId(claim.getId())
+                .setName(claim.getName())
+                .setClaim(claim.getClaim())
+                .setCompleted(claim.isCompleted())
+                .setUserId(claim.getUserId())
+                .setManagerId(claim.getManagerId())
+                .setMasterId(claim.getMasterId())
+                .setPrice(claim.getPrice())
+                .setRejection(claim.getRejection())
+                .createClaimDto();
     }
 
     public List<ClaimDto> getAllClaims() {
@@ -45,11 +49,35 @@ public class ClaimService {
                 .collect(Collectors.toList());
     }
 
-    public void saveClaim(ClaimDto claimDto){
-        claimDao.saveClaim(new Claim(claimDto));
+    public void saveClaim(String name, String claim, UserDto userDto) {
+        if (userDto != null && userDto.getId() != 0) {
+            claimDao.saveClaim(name, claim, userDto.getId());
+        } else {
+            claimDao.saveClaim(name, claim);
+        }
     }
 
+    public List<ClaimDto> getUnmanagedClaims(int recordsPerPage, int currentPage) {
+        return claimDao.findUnmanagedClaims(recordsPerPage, (currentPage-1) * recordsPerPage)
+                .stream()
+                .map(this::mapToClaimDto)
+                .collect(Collectors.toList());
+    }
 
+    public Integer getNumberOfUnmanagedClaims(){
+        return claimDao.getNumberOfUnmanagedClaims();
+    }
 
+    public ClaimDto find(long id){
+        return mapToClaimDto(claimDao.find(id));
+    }
 
+    public void updateClaimByManager(UserDto user, ClaimDto claimDto,
+                                     long price, long masterId, String rejection){
+        claimDto.setPrice(price);
+        claimDto.setManagerId(user.getId());
+        claimDto.setMasterId(masterId);
+        claimDto.setRejection(rejection);
+        claimDao.updateByManager(new Claim(claimDto));
+    }
 }

@@ -8,9 +8,11 @@ public class Claim {
     private String name;
     private String claim;
     private boolean completed;
-    private long userAccountId;
-    private long managerAccountId;
-    private long masterAccountId;
+    private long userId;
+    private long managerId;
+    private long masterId;
+    private long price;
+    private String rejection;
 
     public Claim() {}
 
@@ -19,9 +21,11 @@ public class Claim {
         name = claimDto.getName();
         claim = claimDto.getRequest();
         completed = claimDto.isCompleted();
-        userAccountId = claimDto.getUserAccountId();
-        managerAccountId = claimDto.getManagerAccountId();
-        masterAccountId = claimDto.getMasterAccountId();
+        userId = claimDto.getUserId();
+        managerId = claimDto.getManagerId();
+        masterId = claimDto.getMasterId();
+        rejection = claimDto.getRejection();
+        price = claimDto.getPrice();
     }
 
     public long getId() {
@@ -56,27 +60,43 @@ public class Claim {
         this.completed = completed;
     }
 
-    public long getUserAccountId() {
-        return userAccountId;
+    public long getUserId() {
+        return userId;
     }
 
-    public void setUserAccountId(long userAccountId) {
-        this.userAccountId = userAccountId;
+    public void setUserId(long userId) {
+        this.userId = userId;
     }
 
-    public long getManagerAccountId() {
-        return managerAccountId;
+    public long getManagerId() {
+        return managerId;
     }
 
-    public void setManagerAccountId(long managerAccountId) {
-        this.managerAccountId = managerAccountId;
+    public void setManagerId(long managerId) {
+        this.managerId = managerId;
     }
 
-    public long getMasterAccountId() {
-        return masterAccountId;
+    public long getMasterId() {
+        return masterId;
     }
 
-    public void setMasterAccountId(long masterAccountId) {
-        this.masterAccountId = masterAccountId;
+    public void setMasterId(long masterId) {
+        this.masterId = masterId;
+    }
+
+    public String getRejection() {
+        return rejection;
+    }
+
+    public void setRejection(String rejection) {
+        this.rejection = rejection;
+    }
+
+    public long getPrice() {
+        return price;
+    }
+
+    public void setPrice(long price) {
+        this.price = price;
     }
 }

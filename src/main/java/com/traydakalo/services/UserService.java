@@ -35,5 +35,10 @@ public class UserService {
         }
     }
 
+    public void register(String login, String password) {
+        userDao.register(login, password);
+        userDao.addRole(login, "CUSTOMER");
+    }
+
 
 }

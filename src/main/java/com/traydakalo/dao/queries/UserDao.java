@@ -18,17 +18,29 @@ public class UserDao implements UserDaoInterface {
 
     // Constants ----------------------------------------------------------------------------------
     private static final String SQL_FIND_BY_ID =
-            "SELECT * FROM user_accounts where id=?";
+            "SELECT * FROM users where id=?";
 
     private static final String SQL_LIST_ORDER_BY_ID =
-            "SELECT * FROM user_accounts ORDER BY id";
+            "SELECT * FROM users ORDER BY id";
 
     private static final String SQL_FIND_BY_LOGIN =
             "select ua.id, ua.login, ua.password, user_roles.role\n" +
                     "from user_roles\n" +
                     "         join user_grants ug on user_roles.id = ug.user_role_id\n" +
-                    "         join user_accounts ua on ug.user_id = ua.id\n" +
+                    "         join users ua on ug.user_id = ua.id\n" +
                     "where ua.login = ?";
+
+    private static final String SQL_INSERT_INTO_USERS =
+            "insert into userS (login, password) values (?,?)";
+
+private static final String SQL_INSERT_ROLE =
+            "insert into user_grants (user_id, user_role_id) " +
+                    "values ((select id from users where login=?)," +
+                    " (select id from user_roles where role = ?))";
+
+
+
+
     // Vars ---------------------------------------------------------------------------------------
     private BasicDataSource dataSource;
     private static UserDao userDao;
@@ -38,7 +50,6 @@ public class UserDao implements UserDaoInterface {
     }
     // Constructors -------------------------------------------------------------------------------
 
-    private static ClaimDao claimDao;
 
     public static UserDao getUserDao() {
         if (userDao == null) {
@@ -76,7 +87,7 @@ public class UserDao implements UserDaoInterface {
         User user = new User();
         try (
                 Connection connection = dataSource.getConnection();
-                PreparedStatement statement = connection.prepareStatement(SQL_FIND_BY_LOGIN);
+                PreparedStatement statement = connection.prepareStatement(SQL_FIND_BY_LOGIN)
         ) {
             statement.setString(1, login);
             ResultSet resultSet = statement.executeQuery();
@@ -99,7 +110,7 @@ public class UserDao implements UserDaoInterface {
         try (
                 Connection connection = dataSource.getConnection();
                 PreparedStatement statement = connection.prepareStatement(SQL_LIST_ORDER_BY_ID);
-                ResultSet resultSet = statement.executeQuery();
+                ResultSet resultSet = statement.executeQuery()
         ) {
             while (resultSet.next()) {
                 User user = new User();
@@ -112,5 +123,32 @@ public class UserDao implements UserDaoInterface {
             throw new DaoException(e);
         }
         return users;
+    }
+
+    @Override
+    public void register(String login, String password) {
+        try (
+                Connection connection = dataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement(SQL_INSERT_INTO_USERS)
+        ) {
+            statement.setString(1, login);
+            statement.setString(2, password);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+    }
+
+    public void addRole(String login, String role) {
+        try (
+                Connection connection = dataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement(SQL_INSERT_ROLE)
+        ) {
+            statement.setString(1, login);
+            statement.setString(2, role);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
     }
 }

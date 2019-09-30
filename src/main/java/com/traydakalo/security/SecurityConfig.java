@@ -1,11 +1,10 @@
 package com.traydakalo.security;
 
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import com.traydakalo.entity.Role;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class SecurityConfig {
 
@@ -13,16 +12,14 @@ public class SecurityConfig {
     private static final String ROLE_MANAGER = "MANAGER";
     private static final String ROLE_MASTER = "MASTER";
 
-    // String: Role
-    // List<String>: urlPatterns.
     private static final Map<String, List<String>> mapConfig = new HashMap<>();
+    private static Set<String> protectedUrlPatterns;
 
     static {
         init();
     }
 
     private static void init() {
-
         // Конфигурация для роли "EMPLOYEE".
         List<String> urlPatterns1 = new ArrayList<>();
 
@@ -35,7 +32,8 @@ public class SecurityConfig {
         List<String> urlPatterns2 = new ArrayList<>();
 
         urlPatterns2.add("/userInfo");
-        urlPatterns2.add("/managerTask");
+        urlPatterns2.add("/manager");
+        urlPatterns2.add("/manageTask");
 
         mapConfig.put(ROLE_MANAGER, urlPatterns2);
 
@@ -46,17 +44,20 @@ public class SecurityConfig {
         urlPatterns3.add("/employeeTask");
 
         mapConfig.put(ROLE_MASTER, urlPatterns2);
+        protectedUrlPatterns = mapConfig.values().stream()
+                .flatMap(Collection::stream)
+                .collect(Collectors.toSet());
     }
 
-    public static Set<String> getAllAppRoles() {
-        return mapConfig.keySet();
+    public static boolean isSecurityPage(String servletPath) {
+        return protectedUrlPatterns.contains(servletPath);
     }
 
-    public static List<String> getUrlPatternsForRole(String role) {
-        return mapConfig.get(role);
-    }
+    public static boolean hasPermission(String urlPattern, List<Role> roles) {
+        return roles.stream()
+                .anyMatch(x -> mapConfig
+                        .get(x.getRole())
+                        .contains(urlPattern));
 
-    public static Map<String, List<String>> getMapConfig() {
-        return mapConfig;
     }
 }

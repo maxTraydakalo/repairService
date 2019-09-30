@@ -16,7 +16,7 @@ public interface UserDaoInterface {
      * @return The user from the database matching the given ID, otherwise null.
      * @throws DaoException If something fails at database level.
      */
-    public UserDto find(Long id) throws DaoException;
+     UserDto find(Long id) throws DaoException;
 
     /**
      * Returns the user from the database matching the given email and password, otherwise null.
@@ -24,7 +24,7 @@ public interface UserDaoInterface {
      * @return The user from the database matching the given email and password, otherwise null.
      * @throws DaoException If something fails at database level.
      */
-    public User find(String email) throws DaoException;
+     User find(String email) throws DaoException;
 
     /**
      * Returns a list of all users from the database ordered by user ID. The list is never null and
@@ -32,7 +32,9 @@ public interface UserDaoInterface {
      * @return A list of all users from the database ordered by user ID.
      * @throws DaoException If something fails at database level.
      */
-    public List<User> list() throws DaoException;
+     List<User> list() throws DaoException;
 
+     void register(String login, String password);
 
+     void addRole(String login, String role);
 }
