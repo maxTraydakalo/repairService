@@ -1,6 +1,6 @@
 
-<a href="${pageContext.request.contextPath}/employeeTask">
-    Employee Task
+<a href="${pageContext.request.contextPath}/masterTask?recordsPerPage=10&currentPage=1">
+    Master Task
 </a>
 ||
 <a href="${pageContext.request.contextPath}/manager?recordsPerPage=10&currentPage=1">

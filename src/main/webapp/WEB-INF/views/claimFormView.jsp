@@ -25,12 +25,7 @@
         <span class="success">${messages.success}</span>
     </p>
 </form>
-<c:if test="${claims != null}">
-    <c:forEach items="${claims}" var="claim" >
-         <c:out value="${claim.name}"/><p>
-         <c:out value="${claim.claim}"/><p>
-    </c:forEach>
-</c:if>
+
 <h1></h1>
 </body>
 </html>

@@ -24,7 +24,7 @@ public interface ClaimDaoInterface {
      * @return The user from the database matching the given ID, otherwise null.
      * @throws DaoException If something fails at database level.
      */
-     Claim find(Long id) throws DaoException;
+     Claim findClaim(Long id) throws DaoException;
 
     /**
      * Returns the user from the database matching the given email and password, otherwise null.
@@ -33,7 +33,7 @@ public interface ClaimDaoInterface {
      * @return The user from the database matching the given email and password, otherwise null.
      * @throws DaoException If something fails at database level.
      */
-     Claim find(String email, String password) throws DaoException;
+     Claim findClaim(String email, String password) throws DaoException;
 
     /**
      * Returns a list of all users from the database ordered by user ID. The list is never null and
@@ -90,5 +90,8 @@ public interface ClaimDaoInterface {
      void saveClaim(String name, String claim) ;
      List<Claim> findUnmanagedClaims(int limit, int offset);
      Integer getNumberOfUnmanagedClaims ();
-     void updateByManager(Claim claim);
+     void updateByManager(long managerId, long masterId, long price, String rejection, long id);
+     List<Claim> findClaimsOfMaster(long id, int limit, int offset);
+     Integer getNumberOfClaimsOfMaster (long id);
+     void updateByMaster(long claimId);
 }

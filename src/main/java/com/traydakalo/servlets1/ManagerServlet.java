@@ -1,9 +1,11 @@
 package com.traydakalo.servlets1;
 
 
+import com.traydakalo.dto.ClaimDto;
 import com.traydakalo.services.ClaimService;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -21,23 +23,25 @@ public class ManagerServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        int recordsPerPage = Integer.valueOf(request.getParameter("recordsPerPage"));
-        int currentPage = Integer.valueOf(request.getParameter("currentPage"));
-        int rows = claimService.getNumberOfUnmanagedClaims();
+        int recordsPerPage = claimService
+                .getRecordsPerPage(request.getParameter("recordsPerPage"));
+        int numberOfRows = claimService.getNumberOfUnmanagedClaims();
+        int numberOfPages = claimService.getNumberOfPages(numberOfRows,recordsPerPage);
+        int currentPage = claimService
+                .getCurrentPage(request.getParameter("currentPage"), numberOfPages);
 
-        int nOfPages = rows / recordsPerPage;
-        if (rows % recordsPerPage > 0) {
-            nOfPages++;
-        }
+        List<ClaimDto> claimDtoList = claimService
+                .getUnmanagedClaims(recordsPerPage, currentPage);
 
-        request.setAttribute("noOfPages", nOfPages);
+
+
+        request.setAttribute("noOfPages", numberOfPages);
         request.setAttribute("currentPage", currentPage);
         request.setAttribute("recordsPerPage", recordsPerPage);
-        request.setAttribute("unmanagedClaims",
-                claimService.getUnmanagedClaims(recordsPerPage,currentPage));
+        request.setAttribute("unmanagedClaims", claimDtoList);
 
-     getServletContext().getRequestDispatcher("/WEB-INF/views/managerView.jsp")
-             .forward(request,response);
+        getServletContext().getRequestDispatcher("/WEB-INF/views/managerView.jsp")
+                .forward(request, response);
     }
 
     @Override

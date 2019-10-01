@@ -58,26 +58,70 @@ public class ClaimService {
     }
 
     public List<ClaimDto> getUnmanagedClaims(int recordsPerPage, int currentPage) {
-        return claimDao.findUnmanagedClaims(recordsPerPage, (currentPage-1) * recordsPerPage)
+        return claimDao.findUnmanagedClaims(recordsPerPage, (currentPage - 1) * recordsPerPage)
                 .stream()
                 .map(this::mapToClaimDto)
                 .collect(Collectors.toList());
     }
 
-    public Integer getNumberOfUnmanagedClaims(){
+    public Integer getNumberOfUnmanagedClaims() {
         return claimDao.getNumberOfUnmanagedClaims();
     }
 
-    public ClaimDto find(long id){
-        return mapToClaimDto(claimDao.find(id));
+    public ClaimDto findClaim(long id) {
+        return mapToClaimDto(claimDao.findClaim(id));
     }
 
-    public void updateClaimByManager(UserDto user, ClaimDto claimDto,
-                                     long price, long masterId, String rejection){
-        claimDto.setPrice(price);
-        claimDto.setManagerId(user.getId());
-        claimDto.setMasterId(masterId);
-        claimDto.setRejection(rejection);
-        claimDao.updateByManager(new Claim(claimDto));
+    public void updateClaimByManager(UserDto manager, ClaimDto claimDto,
+                                     long price, long masterId, String rejection) {
+        claimDao.updateByManager(manager.getId(), masterId, price, rejection, claimDto.getId());
+    }
+
+    public List<ClaimDto> getClaimsOfMaster(long id, int recordsPerPage, int currentPage) {
+        return claimDao.findClaimsOfMaster(id, recordsPerPage, (currentPage - 1) * recordsPerPage).stream()
+                .map(this::mapToClaimDto)
+                .collect(Collectors.toList());
+    }
+
+    public Integer getNumberOfClaimsOfMaster(long id) {
+        return claimDao.getNumberOfClaimsOfMaster(id);
+    }
+
+    public void updateByMaster(long claimId) {
+        claimDao.updateByMaster(claimId);
+    }
+
+    public int getRecordsPerPage(String stringRecordsPerPage) {
+        int recordsPerPage;
+        try {
+            recordsPerPage = Integer.valueOf(stringRecordsPerPage);
+            if (recordsPerPage > 100) {
+                recordsPerPage = 100;
+            }
+        } catch (Exception NullPointerException) {
+            recordsPerPage = 10;
+        }
+        return recordsPerPage;
+    }
+
+    public int getCurrentPage(String stringCurrentPage, int numberOfPages) {
+        int currentPage;
+        try {
+            currentPage = Integer.valueOf(stringCurrentPage);
+            if (currentPage > numberOfPages) {
+                currentPage = numberOfPages;
+            }
+        } catch (Exception NullPointerException) {
+            currentPage = 1;
+        }
+        return currentPage;
+    }
+
+    public int getNumberOfPages(int rows, int recordsPerPage) {
+        int numberOfPages = rows / recordsPerPage;
+        if (rows % recordsPerPage > 0) {
+            numberOfPages++;
+        }
+        return numberOfPages;
     }
 }

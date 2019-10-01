@@ -26,15 +26,24 @@ public class ClaimDao implements ClaimDaoInterface {
             "insert into claims (name, claim, user_id) values (?, ?, ?)";
 
     private static final String SQL_LIST_UNMANAGED_CLAIMS_BY_ID =
-            "select * from claims where manager_id IS NULL group by id limit ? offset ?";
+            "select * from claims where manager_id IS NULL order by id limit ? offset ?";
 
-    private static final String SQL_NUMBER_OF_UNMANAGED_CLAIMS_BY_ID =
+    private static final String SQL_NUMBER_OF_UNMANAGED_CLAIMS =
             "select count(id) as number_of_unmanaged_claims from claims where manager_id IS NULL";
 
     private static final String SQL_FIND_BY_ID = "select * from claims where id = ?";
 
-    private static final String SQL_MANAGER_UPDATE_CLAIM = "update claims set manager_id = ?, master_id= ?, price=?, rejection=? WHERE id = ?";
+    private static final String SQL_MANAGER_UPDATE_CLAIM =
+            "update claims set manager_id = ?, master_id = ?, price = ?, rejection = ? where id = ?";
 
+    private static final String SQL_CLAIMS_OF_MASTER =
+            "select * from claims where master_id = ? order by completed, id limit ? offset ?";
+
+    private static final String SQL_NUMBER_OF_CLAIMS_OF_MASTER =
+            "select count(id) as number_of_claims_of_master from claims where master_id = ?";
+
+    private static final String SQL_MASTER_UPDATE_CLAIM =
+            "update claims set completed = 1 where id = ?";
 
 
     // Vars ---------------------------------------------------------------------------------------
@@ -146,7 +155,7 @@ public class ClaimDao implements ClaimDaoInterface {
         Integer numberOfUnmanagedClaims;
         try (
                 Connection connection = dataSource.getConnection();
-                PreparedStatement statement = connection.prepareStatement(SQL_NUMBER_OF_UNMANAGED_CLAIMS_BY_ID);
+                PreparedStatement statement = connection.prepareStatement(SQL_NUMBER_OF_UNMANAGED_CLAIMS);
                 ResultSet resultSet = statement.executeQuery();
         ) {
             resultSet.next();
@@ -158,13 +167,13 @@ public class ClaimDao implements ClaimDaoInterface {
     }
 
     @Override
-    public Claim find(Long id) {
+    public Claim findClaim(Long id) {
         Claim claim;
         try (
                 Connection connection = dataSource.getConnection();
                 PreparedStatement statement = connection.prepareStatement(SQL_FIND_BY_ID);
         ) {
-            statement.setLong(1,id);
+            statement.setLong(1, id);
             ResultSet resultSet = statement.executeQuery();
             resultSet.next();
             claim = mapToClaim(resultSet);
@@ -176,25 +185,76 @@ public class ClaimDao implements ClaimDaoInterface {
     }
 
     @Override
-    public void updateByManager(Claim claim) {
+    public void updateByManager(long managerId, long masterId,
+                                long price, String rejection, long claimId) {
         try (
                 Connection connection = dataSource.getConnection();
                 PreparedStatement statement = connection.prepareStatement(SQL_MANAGER_UPDATE_CLAIM);
         ) {
-            statement.setLong(1, claim.getManagerId());
-            statement.setLong(2, claim.getMasterId());
-            statement.setLong(3, claim.getPrice());
-            statement.setString(4, claim.getRejection());
-            statement.setLong(5, claim.getId());
+            statement.setLong(1, managerId);
+            statement.setLong(2, masterId);
+            statement.setLong(3, price);
+            statement.setString(4, rejection);
+            statement.setLong(5, claimId);
             statement.executeUpdate();
         } catch (SQLException e) {
             throw new DaoException(e);
         }
     }
 
+    @Override
+    public List<Claim> findClaimsOfMaster(long id, int limit, int offset) {
+        List<Claim> claims = new ArrayList<>();
+
+        try (
+                Connection connection = dataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement(SQL_CLAIMS_OF_MASTER);
+        ) {
+            statement.setLong(1, id);
+            statement.setInt(2, limit);
+            statement.setInt(3, offset);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                claims.add(mapToClaim(resultSet));
+            }
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+        return claims;
+    }
 
     @Override
-    public Claim find(String email, String password) throws DaoException {
+    public Integer getNumberOfClaimsOfMaster(long id) {
+        Integer numberOfClaimsOfMaster;
+        try (
+                Connection connection = dataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement(SQL_NUMBER_OF_CLAIMS_OF_MASTER);
+        ) {
+            statement.setLong(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            resultSet.next();
+            numberOfClaimsOfMaster = resultSet.getInt("number_of_claims_of_master");
+            resultSet.close();
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+        return numberOfClaimsOfMaster;
+    }
+
+    @Override
+    public void updateByMaster(long claimId) {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(SQL_MASTER_UPDATE_CLAIM);
+        ) {
+            statement.setLong(1, claimId);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+    }
+
+    @Override
+    public Claim findClaim(String email, String password) throws DaoException {
         return null;
     }
 

@@ -18,7 +18,7 @@ public class ManageTaskServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         UserDto manager = (UserDto)(request.getSession().getAttribute("user"));
         long claimId = Long.valueOf(request.getParameter("id"));
-        ClaimDto claimDto = claimService.find(claimId);
+        ClaimDto claimDto = claimService.findClaim(claimId);
         long price = Long.parseLong(request.getParameter("price"));
         long masterId= Long.parseLong(request.getParameter("masterId"));
         String rejection = request.getParameter("rejection");
@@ -28,7 +28,7 @@ public class ManageTaskServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         long claimId = Long.valueOf(request.getParameter("id"));
-        ClaimDto claimDto = claimService.find(claimId);
+        ClaimDto claimDto = claimService.findClaim(claimId);
 
         request.setAttribute("claim", claimDto);
 

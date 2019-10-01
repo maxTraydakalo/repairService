@@ -7,7 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import java.io.IOException;
 
-@WebServlet("/claim")
+@WebServlet("/claimForm")
 public class ClaimServlet extends javax.servlet.http.HttpServlet {
     private ClaimService claimService = ClaimService.getClaimService();
 
@@ -22,6 +22,6 @@ public class ClaimServlet extends javax.servlet.http.HttpServlet {
 
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws IOException, ServletException {
         request.setAttribute("claims", ClaimService.getClaimService().getAllClaims());
-        getServletContext().getRequestDispatcher("/WEB-INF/views/claim.jsp").forward(request, response);
+        getServletContext().getRequestDispatcher("/WEB-INF/views/claimFormView.jsp").forward(request, response);
     }
 }
