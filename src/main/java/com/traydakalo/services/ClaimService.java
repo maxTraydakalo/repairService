@@ -50,11 +50,8 @@ public class ClaimService {
     }
 
     public void saveClaim(String name, String claim, UserDto userDto) {
-        if (userDto != null && userDto.getId() != 0) {
+        //if (userDto != null && userDto.getId() != 0) {
             claimDao.saveClaim(name, claim, userDto.getId());
-        } else {
-            claimDao.saveClaim(name, claim);
-        }
     }
 
     public List<ClaimDto> getUnmanagedClaims(int recordsPerPage, int currentPage) {

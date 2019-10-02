@@ -98,7 +98,7 @@ public class ClaimDao implements ClaimDaoInterface {
         return claims;
     }
 
-    public void saveClaim(String name, String claim, Long id) {
+    public void saveClaim(String name, String claim, long userId) {
         try (
                 Connection connection = dataSource.getConnection();
                 PreparedStatement statement =
@@ -106,21 +106,7 @@ public class ClaimDao implements ClaimDaoInterface {
         ) {
             statement.setString(1, name);
             statement.setString(2, claim);
-            statement.setLong(3, id);
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            throw new DaoException(e);
-        }
-    }
-
-    public void saveClaim(String name, String claim) {
-        try (
-                //can be moved to separate method, maybe should create something like abstract dao
-                Connection connection = dataSource.getConnection();
-                PreparedStatement statement = connection.prepareStatement(SQL_INSERT_INTO_CLAIMS)
-        ) {
-            statement.setString(1, name);
-            statement.setString(2, claim);
+            statement.setLong(3, userId);
             statement.executeUpdate();
         } catch (SQLException e) {
             throw new DaoException(e);
@@ -253,29 +239,5 @@ public class ClaimDao implements ClaimDaoInterface {
         }
     }
 
-    @Override
-    public Claim findClaim(String email, String password) throws DaoException {
-        return null;
-    }
-
-    @Override
-    public void create(Claim user) throws IllegalArgumentException, DaoException {
-
-    }
-
-    @Override
-    public void delete(Claim user) throws DaoException {
-
-    }
-
-    @Override
-    public boolean existEmail(String email) throws DaoException {
-        return false;
-    }
-
-    @Override
-    public void changePassword(Claim user) throws DaoException {
-
-    }
 
 }

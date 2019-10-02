@@ -6,7 +6,7 @@
 </head>
 <body>
 
-<jsp:include page="_menu.jsp"></jsp:include>
+<jsp:include page="includes/header.jsp"/>
 
 <h3>Home Page</h3>
 

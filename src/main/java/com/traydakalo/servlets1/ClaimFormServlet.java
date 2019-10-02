@@ -7,21 +7,21 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import java.io.IOException;
 
+
 @WebServlet("/claimForm")
-public class ClaimServlet extends javax.servlet.http.HttpServlet {
+public class ClaimFormServlet extends javax.servlet.http.HttpServlet {
     private ClaimService claimService = ClaimService.getClaimService();
 
     protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws IOException {
-        String name = request.getParameter("name");
+        String name = request.getParameter("nameOfClaim");
         String claim = request.getParameter("claim");
         UserDto userDto = (UserDto) request.getSession().getAttribute("user");
 
         claimService.saveClaim(name, claim, userDto);
-        response.sendRedirect(request.getContextPath() + "/claim");
+        response.sendRedirect(request.getContextPath() + "/claimForm");
     }
 
     protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws IOException, ServletException {
-        request.setAttribute("claims", ClaimService.getClaimService().getAllClaims());
         getServletContext().getRequestDispatcher("/WEB-INF/views/claimFormView.jsp").forward(request, response);
     }
 }

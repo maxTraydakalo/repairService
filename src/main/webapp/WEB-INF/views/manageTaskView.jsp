@@ -10,13 +10,13 @@
 <html>
 <head>
     <title>Title</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" >
 </head>
 <body class="m-3">
 <div class="container">
 
     <div class="row">
-        <jsp:include page="_menu.jsp"></jsp:include>
+        <jsp:include page="includes/header.jsp"/>
     </div>
     <form method="POST" action="${pageContext.request.contextPath}/manageTask?id=${claim.id}">
     <div class="row">
@@ -57,6 +57,5 @@
 <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
-
 </body>
 </html>

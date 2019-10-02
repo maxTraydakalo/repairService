@@ -1,18 +1,19 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
     <title>Countries</title>
+    <meta charset="UTF-8">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css">
 </head>
 
-<body class="m-3">
-<div class="container">
+<body>
+<div class="container-fluid">
 
     <div class="row">
-        <jsp:include page="_menu.jsp"></jsp:include>
+        <jsp:include page="includes/header.jsp"/>
     </div>
 
     <div class="row">

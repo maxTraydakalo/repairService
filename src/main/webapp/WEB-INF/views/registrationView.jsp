@@ -11,7 +11,7 @@
     <title>Title</title>
 </head>
 <body>
-<jsp:include page="_menu.jsp"></jsp:include>
+<jsp:include page="includes/header.jsp"></jsp:include>
 
 <form method="POST" action="${pageContext.request.contextPath}/registration">
     <input type="hidden" name="redirectId" value="${param.redirectId}" />

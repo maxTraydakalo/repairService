@@ -1,3 +1,6 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -6,7 +9,7 @@
 </head>
 <body>
 
-<jsp:include page="_menu.jsp"></jsp:include>
+<jsp:include page="includes/header.jsp"/>
 
 <h3>Login Page</h3>
 

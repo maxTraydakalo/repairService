@@ -21,6 +21,6 @@ public class RegistrationServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        getServletContext().getRequestDispatcher("/WEB-INF/views/registration.jsp").forward(request, response);
+        getServletContext().getRequestDispatcher("/WEB-INF/views/registrationView.jsp").forward(request, response);
     }
 }

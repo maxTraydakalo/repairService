@@ -5,14 +5,7 @@
          version="4.0">
 
     <display-name>Archetype Created Web Application</display-name>
- <!--    <servlets1>-->
-<!--        <servlets1-name>HomeServlet</servlets1-name>-->
-<!--        <servlets1-class>com.traydakalo.servlets1.HomeServlet</servlets1-class>-->
-<!--    </servlets1>-->
-<!--    <servlets1-mapping>-->
-<!--        <servlets1-name>HomeServlet</servlets1-name>-->
-<!--        <url-pattern>/index</url-pattern>-->
-<!--    </servlets1-mapping>-->
+
     <filter-mapping>
         <filter-name>SecurityFilter</filter-name>
         <url-pattern>/*</url-pattern>

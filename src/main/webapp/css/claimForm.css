@@ -1,0 +1,12 @@
+textarea {
+    resize: none;
+}
+
+
+#divcharcount {
+    padding: 0.375rem 0 0 0;
+}
+
+.mt-375 {
+    margin-top: .375rem !important;
+}
