@@ -1,4 +1,4 @@
-package com.traydakalo.servlets1;
+package com.traydakalo.servlets;
 
 
 import java.io.IOException;
@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.traydakalo.dto.UserCredentialsDto;
 import com.traydakalo.dto.UserDto;
 import com.traydakalo.services.UserService;
 

@@ -1,4 +1,4 @@
-package com.traydakalo.servlets1;
+package com.traydakalo.servlets;
 
 import com.traydakalo.services.UserService;
 

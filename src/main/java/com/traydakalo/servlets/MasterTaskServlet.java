@@ -1,4 +1,4 @@
-package com.traydakalo.servlets1;
+package com.traydakalo.servlets;
 
 
 import com.traydakalo.dto.ClaimDto;
@@ -8,7 +8,6 @@ import com.traydakalo.services.ClaimService;
 import java.io.IOException;
 import java.util.List;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
